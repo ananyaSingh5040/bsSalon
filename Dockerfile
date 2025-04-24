@@ -30,12 +30,15 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+# Clear & cache Laravel config to pick up env changes like APP_ENV=production
+RUN php artisan config:clear && php artisan config:cache
+
+# Run migrations (you already had this!)
+RUN php artisan migrate --force
+
 # Set Laravel permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
-
-# ❗❗ ADD THIS LINE TO MIGRATE THE DATABASE
-RUN php artisan migrate --force
 
 # Expose port
 EXPOSE 10000
