@@ -28,7 +28,7 @@ WORKDIR /var/www
 COPY . .
 
 # Copy the SQLite database file into the container
-COPY ./database/database.sqlite /var/www/database/database.sqlite
+COPY .app/database/database.sqlite /var/www/database/database.sqlite
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
@@ -42,6 +42,8 @@ RUN php artisan migrate --force
 # Set Laravel permissions and ensure the database has proper permissions
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
 RUN chown www-data:www-data /var/www/database/database.sqlite && chmod 755 /var/www/database/database.sqlite
+RUN chmod -R 777 /var/www/database/database.sqlite
+
 
 # Expose port
 EXPOSE 10000
