@@ -34,7 +34,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN php artisan config:clear && php artisan config:cache
 
 # Run migrations (you already had this!)
-RUN php artisan migrate --force
+# RUN php artisan migrate --force
 
 # Set Laravel permissions
 RUN chown -R www-data:www-data /var/www \
