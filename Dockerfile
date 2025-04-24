@@ -34,6 +34,9 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
+# ❗❗ ADD THIS LINE TO MIGRATE THE DATABASE
+RUN php artisan migrate --force
+
 # Expose port
 EXPOSE 10000
 
