@@ -28,7 +28,7 @@ WORKDIR /var/www
 COPY . .
 
 # Copy the SQLite database file into the container
-COPY .app/database/database.sqlite /var/www/database/database.sqlite
+COPY app/database/database.sqlite /var/www/database/database.sqlite
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
