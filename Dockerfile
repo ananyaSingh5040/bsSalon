@@ -25,9 +25,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 
 # Copy app files
-COPY . . 
+COPY . .
 
-# Copy database.sqlite file to the correct location in container
+# Copy the SQLite database file into the container
 COPY ./database/database.sqlite /var/www/database/database.sqlite
 
 # Install PHP dependencies
@@ -36,12 +36,12 @@ RUN composer install --no-dev --optimize-autoloader
 # Clear & cache Laravel config to pick up env changes like APP_ENV=production
 RUN php artisan config:clear && php artisan config:cache
 
-# Run migrations (you already had this! but just in case)
-# RUN php artisan migrate --force
+# Run migrations (optional if not running on startup)
+RUN php artisan migrate --force
 
-# Set Laravel permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+# Set Laravel permissions and ensure the database has proper permissions
+RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
+RUN chown www-data:www-data /var/www/database/database.sqlite && chmod 755 /var/www/database/database.sqlite
 
 # Expose port
 EXPOSE 10000
