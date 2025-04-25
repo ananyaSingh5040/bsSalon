@@ -27,8 +27,8 @@ WORKDIR /var/www
 # Copy app files
 COPY . .
 
-# Copy the SQLite database file into the container
-COPY app/database/database.sqlite /var/www/database/database.sqlite
+# Create an empty SQLite file inside the container during build if not already existing
+RUN if [ ! -f /var/www/database/database.sqlite ]; then touch /var/www/database/database.sqlite; fi
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
@@ -43,7 +43,6 @@ RUN php artisan migrate --force
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
 RUN chown www-data:www-data /var/www/database/database.sqlite && chmod 755 /var/www/database/database.sqlite
 RUN chmod -R 777 /var/www/database/database.sqlite
-
 
 # Expose port
 EXPOSE 10000
