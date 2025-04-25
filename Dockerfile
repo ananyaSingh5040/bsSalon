@@ -27,11 +27,19 @@ WORKDIR /var/www
 # Copy app files
 COPY . .
 
+# Ensure database directory & file exists
+RUN mkdir -p database && \
+    touch database/database.sqlite && \
+    chmod -R 777 database
+
+# Set correct permissions
+RUN chown -R www-data:www-data /var/www
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Expose port
-EXPOSE 9000
+# Expose Laravel’s internal dev server port
+EXPOSE 8080
 
-# Start PHP-FPM server
-CMD ["php-fpm"]
+# Start Laravel built-in dev server
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]

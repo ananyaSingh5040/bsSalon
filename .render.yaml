@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: laravel-app
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        value: base64:d3MJ9gsBidwcFKOc8gpCBWT8J9p/X2/ev2yZHBB0Z38=
